@@ -34,11 +34,21 @@ namespace Bomberman
             applicationWindow.Closed += new EventHandler(OnClose);
             applicationWindow.KeyPressed += new EventHandler<SFML.Window.KeyEventArgs>(OnKeyPress);
 
+            World myWorld = new World(1);
+
 
             while (applicationWindow.IsOpen())
             {
+
                 applicationWindow.DispatchEvents();
+
+                myWorld.GetInput();
+
+                myWorld.Update(0.155f);
+
                 applicationWindow.Clear(new SFML.Graphics.Color(200,10,10));
+                myWorld.Draw(applicationWindow);
+
                 applicationWindow.Display();
             }
         }
