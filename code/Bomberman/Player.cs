@@ -20,8 +20,6 @@ namespace Bomberman
 
                 System.Console.Out.WriteLine("Error loading player Graphics.");
                 System.Console.Out.WriteLine(e.ToString());
-
-
             }
         }
 
@@ -46,38 +44,47 @@ namespace Bomberman
 
         public void Update(float deltaT)
         {
-            SFML.Window.Vector2i newPositioninTiles = new SFML.Window.Vector2i( (int) positionInTiles.X, (int)positionInTiles.Y);
+            SFML.Window.Vector2i newPositionInTiles = new SFML.Window.Vector2i( (int) positionInTiles.X, (int)positionInTiles.Y);
             if (movingDown)
             {
-                newPositioninTiles.Y += 1;
+                newPositionInTiles.Y += 1;
             }
             if (movingUp)
             {
-                newPositioninTiles.Y -= 1;
+                newPositionInTiles.Y -= 1;
             }
 
             if (movingRight)
             {
-                newPositioninTiles.X += 1;
+                newPositionInTiles.X += 1;
             }
             if (movingLeft)
             {
-                newPositioninTiles.X -= 1;
+                newPositionInTiles.X -= 1;
             }
 
-            if (newPositioninTiles.X < 0)
+            if (newPositionInTiles.X < 0)
             {
-                newPositioninTiles.X = 0;
+                newPositionInTiles.X = 0;
             }
-            if (newPositioninTiles.Y < 0)
+            if (newPositionInTiles.Y < 0)
             {
-                newPositioninTiles.Y = 0;
+                newPositionInTiles.Y = 0;
             }
 
           // TODO Check for upper limit
             // TODO Check if Tile is free
 
-            SFML.Window.Vector2u tempvec = new SFML.Window.Vector2u((uint)newPositioninTiles.X, (uint)newPositioninTiles.Y);
+            if (newPositionInTiles.X > GameProperties.WorldSizeInTiles() -1 )
+            {
+                newPositionInTiles.X = GameProperties.WorldSizeInTiles() -1 ;
+            }
+            if (newPositionInTiles.Y > GameProperties.WorldSizeInTiles() -1 )
+            {
+                newPositionInTiles.Y = GameProperties.WorldSizeInTiles() -1 ;
+            }
+
+            SFML.Window.Vector2u tempvec = new SFML.Window.Vector2u((uint)newPositionInTiles.X, (uint)newPositionInTiles.Y);
             positionInTiles = tempvec;
 
             PositionSprite();

@@ -12,5 +12,11 @@ namespace Bomberman
         {
             return 24;
         }
+
+        public static int WorldSizeInTiles()   // assuming a square World
+        {
+            return 13;
+        }
+
     }
 }
