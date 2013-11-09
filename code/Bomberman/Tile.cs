@@ -76,11 +76,11 @@ namespace Bomberman
         {
             if (this.MyTileType == TileType.TileTypeFree)
             {
-                return true;
+                return false;
             }
             else
             {
-                return false;
+                return true;
             }
         }
     }

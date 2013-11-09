@@ -9,8 +9,10 @@ namespace Bomberman
     class Player
     {
 
-        public Player()
+        public Player(World world)
         {
+            myWorld = world;
+
             try
             {
                 LoadGraphics();
@@ -35,7 +37,10 @@ namespace Bomberman
         public void GetInput()
         {
             ResetActionMap();
-            MapInputToActions();
+            if (movementTimer <= 0.0f)
+            {
+                MapInputToActions();
+            }
         }
 
        
@@ -44,7 +49,19 @@ namespace Bomberman
 
         public void Update(float deltaT)
         {
-            SFML.Window.Vector2i newPositionInTiles = new SFML.Window.Vector2i( (int) positionInTiles.X, (int)positionInTiles.Y);
+            if (movementTimer >= 0.0f)
+            {
+                movementTimer -= deltaT;
+            }
+
+
+            MovePlayerToNewPosition();
+
+        }
+
+        private void MovePlayerToNewPosition()
+        {
+            SFML.Window.Vector2i newPositionInTiles = new SFML.Window.Vector2i((int)positionInTiles.X, (int)positionInTiles.Y);
             if (movingDown)
             {
                 newPositionInTiles.Y += 1;
@@ -63,6 +80,18 @@ namespace Bomberman
                 newPositionInTiles.X -= 1;
             }
 
+            CheckNewPositionIsInWorldAndFree(ref newPositionInTiles);
+
+
+
+            SFML.Window.Vector2u tempvec = new SFML.Window.Vector2u((uint)newPositionInTiles.X, (uint)newPositionInTiles.Y);
+            positionInTiles = tempvec;
+
+            PositionSprite();
+        }
+
+        private void CheckNewPositionIsInWorldAndFree(ref SFML.Window.Vector2i newPositionInTiles)
+        {
             if (newPositionInTiles.X < 0)
             {
                 newPositionInTiles.X = 0;
@@ -72,22 +101,19 @@ namespace Bomberman
                 newPositionInTiles.Y = 0;
             }
 
-          // TODO Check for upper limit
-            // TODO Check if Tile is free
-
-            if (newPositionInTiles.X > GameProperties.WorldSizeInTiles() -1 )
+            if (newPositionInTiles.X > GameProperties.WorldSizeInTiles() - 1)
             {
-                newPositionInTiles.X = GameProperties.WorldSizeInTiles() -1 ;
+                newPositionInTiles.X = GameProperties.WorldSizeInTiles() - 1;
             }
-            if (newPositionInTiles.Y > GameProperties.WorldSizeInTiles() -1 )
+            if (newPositionInTiles.Y > GameProperties.WorldSizeInTiles() - 1)
             {
-                newPositionInTiles.Y = GameProperties.WorldSizeInTiles() -1 ;
+                newPositionInTiles.Y = GameProperties.WorldSizeInTiles() - 1;
             }
 
-            SFML.Window.Vector2u tempvec = new SFML.Window.Vector2u((uint)newPositionInTiles.X, (uint)newPositionInTiles.Y);
-            positionInTiles = tempvec;
-
-            PositionSprite();
+            if (myWorld.IsTileBlocked(newPositionInTiles))
+            {
+                newPositionInTiles = new SFML.Window.Vector2i((int)(positionInTiles.X), (int)(positionInTiles.Y));
+            }
 
         }
 
@@ -113,7 +139,8 @@ namespace Bomberman
         private void MapInputToActions()
         {
             // TODO more players/keys later
-            // TODO Input Timer every 50 ms or so
+
+            
 
             if (SFML.Window.Keyboard.IsKeyPressed(SFML.Window.Keyboard.Key.Left))
             {
@@ -140,18 +167,22 @@ namespace Bomberman
 
         private void MoveUpAction()
         {
+            movementTimer = GameProperties.PlayerMovementTime();
             this.movingUp = true;
         }
         private void MoveDownAction()
         {
+            movementTimer = GameProperties.PlayerMovementTime();
             this.movingDown = true;
         }
         private void MoveRightAction()
         {
+            movementTimer = GameProperties.PlayerMovementTime();
             this.movingRight = true;
         }
         private void MoveLeftAction()
         {
+            movementTimer = GameProperties.PlayerMovementTime();
             this.movingLeft = true;
         }
 
@@ -170,6 +201,10 @@ namespace Bomberman
             playerTexture = new SFML.Graphics.Texture("../gfx/player.png");
             playerSprite = new SFML.Graphics.Sprite(playerTexture);
         }
+
+        private float movementTimer = 0.0f; // time til two successive Movement commands
+        
+        private World myWorld;
 
 
     }

@@ -30,6 +30,8 @@ namespace Bomberman
         {
             SFML.Graphics.RenderWindow applicationWindow = new SFML.Graphics.RenderWindow(new SFML.Window.VideoMode(800,600, 32), "Bomberman");
 
+            applicationWindow.SetFramerateLimit(60);
+
             // fuddle with resizing the images later on
             applicationWindow.Closed += new EventHandler(OnClose);
             applicationWindow.KeyPressed += new EventHandler<SFML.Window.KeyEventArgs>(OnKeyPress);

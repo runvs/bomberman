@@ -56,7 +56,7 @@ namespace Bomberman
 
             for (int i = 0; i != numberOfPlayers; ++i)
             {
-                playerList.Add(new Player());
+                playerList.Add(new Player(this));
             }
 
             tileList = new System.Collections.Generic.List<Tile>();
@@ -80,7 +80,7 @@ namespace Bomberman
             }
         }
 
-        bool IsTileBlocked(SFML.Window.Vector2i pos)
+        public bool IsTileBlocked(SFML.Window.Vector2i pos)
         {
             bool ret = false;
 

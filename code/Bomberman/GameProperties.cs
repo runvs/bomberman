@@ -18,5 +18,10 @@ namespace Bomberman
             return 13;
         }
 
+        public static float PlayerMovementTime()
+        {
+            return 1.5f;
+        }
+
     }
 }
