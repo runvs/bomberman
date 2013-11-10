@@ -189,7 +189,8 @@ namespace Bomberman
 
         private void PlaceBombAction()
         {
-
+            SFML.Window.Vector2i pos = new SFML.Window.Vector2i((int)(positionInTiles.X), (int)(positionInTiles.Y));
+            myWorld.SpawnBombOnPosition(pos);
         }
 
 

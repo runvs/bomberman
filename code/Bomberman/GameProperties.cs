@@ -20,8 +20,18 @@ namespace Bomberman
 
         public static float PlayerMovementTime()
         {
+            return 0.15f;
+        }
+
+
+        public static float BombCounterTime()
+        {
             return 1.5f;
         }
 
+        internal static float ExplosionTime()
+        {
+            return 0.5f;
+        }
     }
 }

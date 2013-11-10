@@ -66,6 +66,10 @@ namespace Bomberman
             {
                 tileTexture = new SFML.Graphics.Texture("../gfx/TileWall.png");
             }
+            else if (this.MyTileType == TileType.TileTypeBreakable)
+            {
+                tileTexture = new SFML.Graphics.Texture("../gfx/TileBreakable.png");
+            }
 
             tileSprite = new SFML.Graphics.Sprite(tileTexture);
 

@@ -38,20 +38,32 @@ namespace Bomberman
 
             World myWorld = new World(1);
 
+            int startTime = Environment.TickCount;
+            int endTime = startTime;
+            float time = 16.7f;
 
             while (applicationWindow.IsOpen())
             {
+
+                if (startTime != endTime)
+                {
+                    time = (float)(endTime - startTime) / 1000.0f;
+                    System.Console.Out.WriteLine(time);
+
+                }
+                startTime = Environment.TickCount;
 
                 applicationWindow.DispatchEvents();
 
                 myWorld.GetInput();
 
-                myWorld.Update(0.155f);
+                myWorld.Update(time);
 
                 applicationWindow.Clear(new SFML.Graphics.Color(200,10,10));
                 myWorld.Draw(applicationWindow);
 
                 applicationWindow.Display();
+                endTime = Environment.TickCount;
             }
         }
     }

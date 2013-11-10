@@ -50,6 +50,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bomb.cs" />
+    <Compile Include="Explosion.cs" />
     <Compile Include="GameProperties.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
