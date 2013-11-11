@@ -9,14 +9,31 @@ namespace Bomberman
     class Explosion
     {
         private World myWorld;
-        public Explosion(World world, SFML.Window.Vector2i position, ExplosionDirection dir)
+        public Explosion(World world, SFML.Window.Vector2i position, ExplosionDirection dir, int number, int numberMax)
         {
             myWorld = world;
             Position = position;
             Direction = dir;
             ExplosionDone = false;
             explosionTime = GameProperties.ExplosionTime();
+
+            ExplosionNumber = number;
+            ExplosionNumberMax = numberMax;
+
+            try
+            {
+                LoadGraphics();
+            }
+            catch (SFML.LoadingFailedException e)
+            {
+
+                System.Console.Out.WriteLine("Error loading explosion Graphics.");
+                System.Console.Out.WriteLine(e.ToString());
+            }
+
+            explosionSprite.Position = new SFML.Window.Vector2f((float)(GameProperties.TileSizeInPixel() * position.X), (float)(GameProperties.TileSizeInPixel() * position.Y));
         }
+
 
         public enum ExplosionDirection
         {
@@ -38,11 +55,30 @@ namespace Bomberman
             }
         }
 
+        public void Draw(SFML.Graphics.RenderWindow rw)
+        {
+            rw.Draw(explosionSprite);
+        }
+
         private float explosionTime;
 
-        SFML.Window.Vector2i Position { get; set; }
+        public SFML.Window.Vector2i Position { get; private set; }
 
         public bool ExplosionDone { get; private set; }
+
+
+        SFML.Graphics.Texture explosiontexture;
+        SFML.Graphics.Sprite explosionSprite;
+
+        public int ExplosionNumber { get; private set; }
+        public int ExplosionNumberMax { get; private set; }
+
+        private void LoadGraphics()
+        {
+            explosiontexture = new SFML.Graphics.Texture("../gfx/explosion.png");
+            explosionSprite = new SFML.Graphics.Sprite(explosiontexture);
+        }
+
 
     }
 }

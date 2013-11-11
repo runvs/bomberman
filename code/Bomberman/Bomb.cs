@@ -16,7 +16,16 @@ namespace Bomberman
 
             Exploded = false;
 
-            LoadGraphics();
+            try
+            {
+                LoadGraphics();
+            }
+            catch (SFML.LoadingFailedException e)
+            {
+
+                System.Console.Out.WriteLine("Error loading bomb Graphics.");
+                System.Console.Out.WriteLine(e.ToString());
+            }
 
             bombSprite.Position = new SFML.Window.Vector2f((float)(GameProperties.TileSizeInPixel() * position.X), (float)(GameProperties.TileSizeInPixel() * position.Y));
 

@@ -31,7 +31,7 @@ namespace Bomberman
 
         internal static float ExplosionTime()
         {
-            return 0.5f;
+            return 0.25f;
         }
     }
 }
