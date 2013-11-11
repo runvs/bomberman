@@ -12,7 +12,7 @@ namespace Bomberman
         public Explosion(World world, SFML.Window.Vector2i position, ExplosionDirection dir, int number, int numberMax)
         {
             myWorld = world;
-            Position = position;
+            PositionInTiles = position;
             Direction = dir;
             ExplosionDone = false;
             explosionTime = GameProperties.ExplosionTime();
@@ -29,6 +29,13 @@ namespace Bomberman
 
                 System.Console.Out.WriteLine("Error loading explosion Graphics.");
                 System.Console.Out.WriteLine(e.ToString());
+            }
+
+            explosionSprite.Origin = new SFML.Window.Vector2f(0.0f, 0.0f);
+            if (Direction == ExplosionDirection.DirDown || Direction == ExplosionDirection.DirUp)
+            {
+                explosionSprite.Rotation = 90.0f;
+                explosionSprite.Origin = new SFML.Window.Vector2f(0.0f, +explosionSprite.GetLocalBounds().Width);// rotate also rotates the coordinate system. Think about this crazy shit
             }
 
             explosionSprite.Position = new SFML.Window.Vector2f((float)(GameProperties.TileSizeInPixel() * position.X), (float)(GameProperties.TileSizeInPixel() * position.Y));
@@ -62,7 +69,7 @@ namespace Bomberman
 
         private float explosionTime;
 
-        public SFML.Window.Vector2i Position { get; private set; }
+        public SFML.Window.Vector2i PositionInTiles { get; private set; }
 
         public bool ExplosionDone { get; private set; }
 

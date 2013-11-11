@@ -12,6 +12,8 @@ namespace Bomberman
         public Player(World world)
         {
             myWorld = world;
+            IsDead = false;
+
 
             try
             {
@@ -32,7 +34,15 @@ namespace Bomberman
         private bool movingUp;
         private bool movingDown;
 
-        private SFML.Window.Vector2u positionInTiles = new SFML.Window.Vector2u(0,0);
+        private SFML.Window.Vector2i positionInTiles = new SFML.Window.Vector2i(0,0);
+
+        public SFML.Window.Vector2i PositionInTiles
+        {
+            get
+            {
+                return positionInTiles;
+            }
+        }
 
         public void GetInput()
         {
@@ -84,7 +94,7 @@ namespace Bomberman
 
 
 
-            SFML.Window.Vector2u tempvec = new SFML.Window.Vector2u((uint)newPositionInTiles.X, (uint)newPositionInTiles.Y);
+            SFML.Window.Vector2i tempvec = newPositionInTiles;
             positionInTiles = tempvec;
 
             PositionSprite();
@@ -139,8 +149,6 @@ namespace Bomberman
         private void MapInputToActions()
         {
             // TODO more players/keys later
-
-            
 
             if (SFML.Window.Keyboard.IsKeyPressed(SFML.Window.Keyboard.Key.Left))
             {
@@ -206,6 +214,15 @@ namespace Bomberman
         private float movementTimer = 0.0f; // time til two successive Movement commands
         
         private World myWorld;
+
+        public bool IsDead { get; private set; }
+
+        
+
+        public void Die()
+        {
+            IsDead = true;
+        }
 
 
     }

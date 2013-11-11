@@ -12,7 +12,7 @@ namespace Bomberman
         {
             myWorld = world;
             timeUntilExplosion = GameProperties.BombCounterTime();
-            BombPosition = position;
+            BombPositionInTiles = position;
 
             Exploded = false;
 
@@ -48,7 +48,7 @@ namespace Bomberman
 
         float timeUntilExplosion;
 
-        public SFML.Window.Vector2i BombPosition { get; set; }
+        public SFML.Window.Vector2i BombPositionInTiles { get; set; }
 
         public bool Exploded { get; private set; }
 
