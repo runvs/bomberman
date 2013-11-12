@@ -36,7 +36,7 @@ namespace Bomberman
             applicationWindow.Closed += new EventHandler(OnClose);
             applicationWindow.KeyPressed += new EventHandler<SFML.Window.KeyEventArgs>(OnKeyPress);
 
-            World myWorld = new World(1);
+            Game myGame = new Game();
             
 
             int startTime = Environment.TickCount;
@@ -45,23 +45,20 @@ namespace Bomberman
 
             while (applicationWindow.IsOpen())
             {
-
                 if (startTime != endTime)
                 {
                     time = (float)(endTime - startTime) / 1000.0f;
-                    System.Console.Out.WriteLine(time + "\t" + myWorld.NumberOfPlayersAlive);
-
                 }
                 startTime = Environment.TickCount;
 
                 applicationWindow.DispatchEvents();
 
-                myWorld.GetInput();
+                myGame.GetInput();
 
-                myWorld.Update(time);
+                myGame.Update(time);
 
                 applicationWindow.Clear(new SFML.Graphics.Color(200,10,10));
-                myWorld.Draw(applicationWindow);
+                myGame.Draw(applicationWindow);
 
                 applicationWindow.Display();
                 endTime = Environment.TickCount;

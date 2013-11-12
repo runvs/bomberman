@@ -304,6 +304,13 @@ namespace Bomberman
         }
 
 
+
+        public Statistic EndThisRound()
+        {
+            Statistic ret = new Statistic();
+
+            return ret;
+        }
     }
 
 
