@@ -54,26 +54,10 @@ namespace Bomberman
 
             CheckExplosionsForProgress();
 
-           
-
+            CheckPlayersAlive();
         }
 
-        private void CheckPlayerIsInExplosion(Player p)
-        {
-            SFML.Window.Vector2i playerPositionInTiles = p.PositionInTiles;
 
-            foreach (Explosion e in explosionList)
-            {
-                if (e.PositionInTiles.X == playerPositionInTiles.X && e.PositionInTiles.Y == playerPositionInTiles.Y)
-                {
-                    p.Die();
-                    break;  // you cannot die twice
-                }
-            }
-
-        }
-
-        
 
         public void Draw(SFML.Graphics.RenderWindow rw)
         {
@@ -95,10 +79,45 @@ namespace Bomberman
             {
                 e.Draw(rw);
             }
+        }
 
 
+
+        private void CheckPlayerIsInExplosion(Player p)
+        {
+            SFML.Window.Vector2i playerPositionInTiles = p.PositionInTiles;
+
+            foreach (Explosion e in explosionList)
+            {
+                if (e.PositionInTiles.X == playerPositionInTiles.X && e.PositionInTiles.Y == playerPositionInTiles.Y)
+                {
+                    p.Die();
+
+                    // update kill counter 
+                    break;  // you cannot die twice
+                }
+            }
 
         }
+
+        public int NumberOfPlayersAlive {get; private set;}
+
+        private void CheckPlayersAlive()
+        {
+            // get new number of alive Players
+            NumberOfPlayersAlive = 0;
+            foreach (Player p in playerList)
+            {
+                if (!p.IsDead)
+                {
+                    NumberOfPlayersAlive++;
+                }
+            }
+        }
+
+        
+
+        
 
 
         private void InitGame()
@@ -224,6 +243,17 @@ namespace Bomberman
                     }
                     else // it is no free tile so check if this is a breakable tile
                     {
+
+                        // check if there is a bomb on this tile
+                        foreach (Bomb b in bombList)
+                        {
+                            if (b.BombPositionInTiles.X == newPos.X && b.BombPositionInTiles.Y == newPos.Y)
+                            {
+                                b.Explode();
+                                break;
+                            }
+                        }
+
                         Tile myBreakableAndSoonBrokenTile = null;
                         foreach (Tile t in tileList)
                         {

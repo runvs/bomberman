@@ -41,7 +41,7 @@ namespace Bomberman
             }
         }
 
-        private void Explode ( )
+        public void Explode ( )
         {
             Exploded = true;
         }
