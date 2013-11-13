@@ -124,9 +124,9 @@ namespace Bomberman
         {
             playerList = new System.Collections.Generic.List<Player>();
 
-            for (int i = 0; i != numberOfPlayers; ++i)
+            for (int i = 1; i != numberOfPlayers+1; ++i)
             {
-                playerList.Add(new Player(this));
+                playerList.Add(new Player(this,i));
             }
 
 

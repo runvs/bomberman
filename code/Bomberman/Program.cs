@@ -57,7 +57,7 @@ namespace Bomberman
 
                 myGame.Update(time);
 
-                applicationWindow.Clear(new SFML.Graphics.Color(200,10,10));
+                //applicationWindow.Clear(new SFML.Graphics.Color(200,10,10));
                 myGame.Draw(applicationWindow);
 
                 applicationWindow.Display();

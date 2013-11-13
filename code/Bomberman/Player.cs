@@ -9,11 +9,14 @@ namespace Bomberman
     class Player
     {
 
-        public Player(World world)
+        public Player(World world, int number)
         {
             myWorld = world;
             IsDead = false;
 
+            playerNumber = number;
+
+            SetPlayerNumberDependendProperties();
 
             try
             {
@@ -27,6 +30,29 @@ namespace Bomberman
             }
         }
 
+        private void SetPlayerNumberDependendProperties()
+        {
+            PlayerName = "Player" + playerNumber.ToString();
+
+            if (playerNumber == 1)
+            {
+                PositionInTiles = new SFML.Window.Vector2i(0, 0);
+            }
+            else if (playerNumber == 2)
+            {
+                PositionInTiles = new SFML.Window.Vector2i(GameProperties.WorldSizeInTiles(), 0);
+            }
+            else if (playerNumber == 3)
+            {
+                PositionInTiles = new SFML.Window.Vector2i(0, GameProperties.WorldSizeInTiles());
+            }
+            else if (playerNumber == 4)
+            {
+                PositionInTiles = new SFML.Window.Vector2i(GameProperties.WorldSizeInTiles(), GameProperties.WorldSizeInTiles());
+            }
+
+        }
+
 
 
         private bool movingRight;
@@ -34,15 +60,15 @@ namespace Bomberman
         private bool movingUp;
         private bool movingDown;
 
-        private SFML.Window.Vector2i positionInTiles = new SFML.Window.Vector2i(0,0);
+
 
         public SFML.Window.Vector2i PositionInTiles
         {
-            get
-            {
-                return positionInTiles;
-            }
+            get;
+            private set;
         }
+
+        public string PlayerName { get; private set; }
 
         public void GetInput()
         {
@@ -71,7 +97,7 @@ namespace Bomberman
 
         private void MovePlayerToNewPosition()
         {
-            SFML.Window.Vector2i newPositionInTiles = new SFML.Window.Vector2i((int)positionInTiles.X, (int)positionInTiles.Y);
+            SFML.Window.Vector2i newPositionInTiles = new SFML.Window.Vector2i((int)PositionInTiles.X, (int)PositionInTiles.Y);
             if (movingDown)
             {
                 newPositionInTiles.Y += 1;
@@ -95,7 +121,7 @@ namespace Bomberman
 
 
             SFML.Window.Vector2i tempvec = newPositionInTiles;
-            positionInTiles = tempvec;
+            PositionInTiles = tempvec;
 
             PositionSprite();
         }
@@ -122,14 +148,14 @@ namespace Bomberman
 
             if (myWorld.IsTileBlocked(newPositionInTiles))
             {
-                newPositionInTiles = new SFML.Window.Vector2i((int)(positionInTiles.X), (int)(positionInTiles.Y));
+                newPositionInTiles = PositionInTiles;
             }
 
         }
 
         private void PositionSprite()
         {
-            this.playerSprite.Position = new SFML.Window.Vector2f((float)(positionInTiles.X * GameProperties.TileSizeInPixel()), (float)(positionInTiles.Y * GameProperties.TileSizeInPixel()));
+            this.playerSprite.Position = new SFML.Window.Vector2f((float)(PositionInTiles.X * GameProperties.TileSizeInPixel()), (float)(PositionInTiles.Y * GameProperties.TileSizeInPixel()));
 
         }
 
@@ -146,28 +172,104 @@ namespace Bomberman
             movingDown = false;
         }
 
+        SFML.Window.Keyboard.Key MoveLeftKey()
+        {
+            SFML.Window.Keyboard.Key actionKey = SFML.Window.Keyboard.Key.Left;
+            if (playerNumber == 2)
+            {
+                actionKey = SFML.Window.Keyboard.Key.A;
+            }
+            else if (playerNumber == 3)
+            {
+                actionKey = SFML.Window.Keyboard.Key.Numpad4;
+            }
+
+            return actionKey;
+        }
+
+        SFML.Window.Keyboard.Key MoveRightKey()
+        {
+            SFML.Window.Keyboard.Key actionKey = SFML.Window.Keyboard.Key.Right;
+            if (playerNumber == 2)
+            {
+                actionKey = SFML.Window.Keyboard.Key.D;
+            }
+            else if (playerNumber == 3)
+            {
+                actionKey = SFML.Window.Keyboard.Key.Numpad6;
+            }
+
+            return actionKey;
+        }
+
+        SFML.Window.Keyboard.Key MoveDownKey()
+        {
+            SFML.Window.Keyboard.Key actionKey = SFML.Window.Keyboard.Key.Down;
+            if (playerNumber == 2)
+            {
+                actionKey = SFML.Window.Keyboard.Key.S;
+            }
+            else if (playerNumber == 3)
+            {
+                actionKey = SFML.Window.Keyboard.Key.Numpad5;
+            }
+
+            return actionKey;
+        }
+
+        SFML.Window.Keyboard.Key MoveUpKey()
+        {
+            SFML.Window.Keyboard.Key actionKey = SFML.Window.Keyboard.Key.Up;
+            if (playerNumber == 2)
+            {
+                actionKey = SFML.Window.Keyboard.Key.W;
+            }
+            else if (playerNumber == 3)
+            {
+                actionKey = SFML.Window.Keyboard.Key.Numpad8;
+            }
+
+            return actionKey;
+        }
+
+        SFML.Window.Keyboard.Key BombKey()
+        {
+            SFML.Window.Keyboard.Key actionKey = SFML.Window.Keyboard.Key.RControl;
+            if (playerNumber == 2)
+            {
+                actionKey = SFML.Window.Keyboard.Key.LShift;
+            }
+            else if (playerNumber == 3)
+            {
+                actionKey = SFML.Window.Keyboard.Key.Numpad0;
+            }
+
+            return actionKey;
+        }
+
+
         private void MapInputToActions()
         {
             // TODO more players/keys later
 
-            if (SFML.Window.Keyboard.IsKeyPressed(SFML.Window.Keyboard.Key.Left))
+            if (SFML.Window.Keyboard.IsKeyPressed(MoveLeftKey()))
             {
                 MoveLeftAction();
             }
-            else if (SFML.Window.Keyboard.IsKeyPressed(SFML.Window.Keyboard.Key.Right))
+            else if (SFML.Window.Keyboard.IsKeyPressed(MoveRightKey()))
             {
                 MoveRightAction();
             }
-            else if (SFML.Window.Keyboard.IsKeyPressed(SFML.Window.Keyboard.Key.Down))
+            else if (SFML.Window.Keyboard.IsKeyPressed(MoveDownKey()))
             {
                 MoveDownAction();
             }
-            else if (SFML.Window.Keyboard.IsKeyPressed(SFML.Window.Keyboard.Key.Up))
+            else if (SFML.Window.Keyboard.IsKeyPressed(MoveUpKey()))
             {
                 MoveUpAction();
             }
 
-            if (SFML.Window.Keyboard.IsKeyPressed(SFML.Window.Keyboard.Key.Space))
+            if (SFML.Window.Keyboard.IsKeyPressed(BombKey()))
             {
                 PlaceBombAction();
             }
@@ -197,7 +299,7 @@ namespace Bomberman
 
         private void PlaceBombAction()
         {
-            SFML.Window.Vector2i pos = new SFML.Window.Vector2i((int)(positionInTiles.X), (int)(positionInTiles.Y));
+            SFML.Window.Vector2i pos = PositionInTiles;
             myWorld.SpawnBombOnPosition(pos);
         }
 
@@ -214,6 +316,7 @@ namespace Bomberman
         private float movementTimer = 0.0f; // time til two successive Movement commands
         
         private World myWorld;
+        private int playerNumber;
 
         public bool IsDead { get; private set; }
 

@@ -12,7 +12,10 @@ namespace Bomberman
         public Game()
         {
             gameState = State.Menu;
+            font = new SFML.Graphics.Font("../gfx/font.ttf");
         }
+
+        private SFML.Graphics.Font font;
 
         World myWorld;
 
@@ -67,6 +70,7 @@ namespace Bomberman
 
         public void Draw(SFML.Graphics.RenderWindow rw)
         {
+            rw.Clear();
             if (gameState == State.Menu)
             {
                 DrawMenu(rw);
@@ -87,8 +91,21 @@ namespace Bomberman
 
         private void DrawMenu(SFML.Graphics.RenderWindow rw)
         {
+            
             SFML.Graphics.Text text = new SFML.Graphics.Text();
+            text.DisplayedString = "Bomberman";
+            
+            text.Font = font;
+            text.Scale = new SFML.Window.Vector2f(2,2);
+            text.Position = new SFML.Window.Vector2f(400 - text.GetGlobalBounds().Width / 2.0f, 150 - text.GetGlobalBounds().Height / 2.0f);
             rw.Draw(text);
+
+            text = new SFML.Graphics.Text();
+            text.DisplayedString = "Start [Return]";
+            text.Font = font;
+            text.Position = new SFML.Window.Vector2f(400 - text.GetGlobalBounds().Width / 2.0f, 250 - text.GetGlobalBounds().Height / 2.0f);
+            rw.Draw(text);
+
         }
 
         private void DrawCredits(SFML.Graphics.RenderWindow rw)
