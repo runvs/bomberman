@@ -332,5 +332,17 @@ namespace Bomberman
         }
 
 
+
+        internal void PickUpPowerUp(PowerUp.PowerUpType powerUpType)
+        {
+            if (powerUpType == PowerUp.PowerUpType.MoreBombs)
+            {
+
+            }
+            else if (powerUpType == PowerUp.PowerUpType.StrongerBombs)
+            {
+                this.BombStrenght++;
+            }
+        }
     }
 }

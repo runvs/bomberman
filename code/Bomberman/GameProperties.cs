@@ -38,5 +38,10 @@ namespace Bomberman
         {
             return 1;
         }
+
+        internal static double PowerUpSpawnProbability()
+        {
+            return 0.2;
+        }
     }
 }

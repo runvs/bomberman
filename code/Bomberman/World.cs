@@ -17,6 +17,14 @@ namespace Bomberman
         }
 
 
+        private int numberOfPlayers = 1;
+        System.Collections.Generic.IList<Player> playerList;
+        System.Collections.Generic.IList<Bomb> bombList;
+        System.Collections.Generic.List<Explosion> explosionList;
+        System.Collections.Generic.IList<Tile> tileList;
+        System.Collections.Generic.List<PowerUp> powerupList;
+
+
         public void GetInput()
         {
             foreach (Player p in playerList)
@@ -36,6 +44,7 @@ namespace Bomberman
                 {
                     p.Update(deltaT);
                     CheckPlayerIsInExplosion(p);
+                    CheckPlayerPickedUpPowerUp(p);
                 }
 
             }
@@ -55,6 +64,21 @@ namespace Bomberman
             CheckExplosionsForProgress();
 
             CheckPlayersAlive();
+        }
+
+        private void CheckPlayerPickedUpPowerUp(Player p)
+        {
+            foreach (PowerUp up in powerupList)
+            {
+                if (p.PositionInTiles.X == up.PositionInTiles.X && p.PositionInTiles.Y == up.PositionInTiles.Y)
+                {
+                    p.PickUpPowerUp(up.Type);
+                    up.Picked = true;
+                }
+            }
+
+            powerupList.RemoveAll(up => up.Picked == true);
+
         }
 
 
@@ -133,7 +157,7 @@ namespace Bomberman
 
             bombList = new System.Collections.Generic.List<Bomb>();
             explosionList = new System.Collections.Generic.List<Explosion>();
-
+            powerupList = new List<PowerUp>();
 
 
             tileList = new System.Collections.Generic.List<Tile>();
@@ -193,13 +217,7 @@ namespace Bomberman
         }
 
 
-        private int numberOfPlayers = 1;
-        System.Collections.Generic.IList<Player> playerList;
-        System.Collections.Generic.IList<Bomb> bombList;
-        System.Collections.Generic.List<Explosion> explosionList;
-        
 
-        System.Collections.Generic.IList<Tile> tileList;
 
 
 
@@ -242,6 +260,16 @@ namespace Bomberman
 
                                 Explosion newExplosion = new Explosion(this, newPos, e.Direction, e.ExplosionNumber + 1, e.ExplosionNumberMax, e.Owner);
                                 temporaryListForNewExplosions.Add(newExplosion);
+                                foreach (PowerUp up in powerupList)
+                                {
+                                    if (up.PositionInTiles.X == newPos.X && up.PositionInTiles.Y == newPos.Y)
+                                    {
+                                        up.Picked = true;
+                                    }
+                                }
+
+                                powerupList.RemoveAll(up => up.Picked == true);
+
                             }
 
                             else // it is no free tile so check if this is a breakable tile
@@ -275,6 +303,7 @@ namespace Bomberman
                                     tileList.Remove(myBreakableAndSoonBrokenTile);
 
                                     Tile freeTile = new Tile(myBreakableAndSoonBrokenTile.TilePosition, Tile.TileType.TileTypeFree);
+                                    CheckSpawnPowerUp(freeTile);
                                     tileList.Add(freeTile);
 
                                 }
@@ -293,6 +322,17 @@ namespace Bomberman
 
 
             }
+        }
+
+        System.Random myRandomGenerator = new System.Random();
+
+        private void CheckSpawnPowerUp(Tile freeTile)
+        {
+            if (myRandomGenerator.NextDouble() <= GameProperties.PowerUpSpawnProbability())
+            {
+                PowerUp up = new PowerUp(freeTile.TilePosition);
+            }
+
         }
 
         private void CheckBombsForExplosions()
