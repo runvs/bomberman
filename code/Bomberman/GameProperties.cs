@@ -33,5 +33,10 @@ namespace Bomberman
         {
             return 0.25f;
         }
+
+        internal static int DefaultBombStrengthInTiles()
+        {
+            return 1;
+        }
     }
 }

@@ -9,9 +9,13 @@ namespace Bomberman
     class Explosion
     {
         private World myWorld;
-        public Explosion(World world, SFML.Window.Vector2i position, ExplosionDirection dir, int number, int numberMax)
+        private Player myOwner;
+        public Player Owner { get { return myOwner; } }
+        public Explosion(World world, SFML.Window.Vector2i position, ExplosionDirection dir, int number, int numberMax, Player player)
         {
             myWorld = world;
+            myOwner = player;
+
             PositionInTiles = position;
             Direction = dir;
             ExplosionDone = false;
@@ -19,6 +23,7 @@ namespace Bomberman
 
             ExplosionNumber = number;
             ExplosionNumberMax = numberMax;
+            HasSpawnedOtherExplosions = false;
 
             try
             {
@@ -41,6 +46,7 @@ namespace Bomberman
             explosionSprite.Position = new SFML.Window.Vector2f((float)(GameProperties.TileSizeInPixel() * position.X), (float)(GameProperties.TileSizeInPixel() * position.Y));
         }
 
+        public bool HasSpawnedOtherExplosions { get; set; }
 
         public enum ExplosionDirection
         {

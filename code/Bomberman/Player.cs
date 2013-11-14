@@ -18,6 +18,8 @@ namespace Bomberman
 
             SetPlayerNumberDependendProperties();
 
+            BombStrenght = GameProperties.DefaultBombStrengthInTiles();
+
             try
             {
                 LoadGraphics();
@@ -300,12 +302,14 @@ namespace Bomberman
         private void PlaceBombAction()
         {
             SFML.Window.Vector2i pos = PositionInTiles;
-            myWorld.SpawnBombOnPosition(pos);
+            myWorld.SpawnBombOnPosition(pos, this);
         }
 
 
         private SFML.Graphics.Texture playerTexture;
         private SFML.Graphics.Sprite playerSprite;
+
+        public int BombStrenght { get; private set; }
 
         private void LoadGraphics()
         {

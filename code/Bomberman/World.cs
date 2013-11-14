@@ -196,18 +196,18 @@ namespace Bomberman
         private int numberOfPlayers = 1;
         System.Collections.Generic.IList<Player> playerList;
         System.Collections.Generic.IList<Bomb> bombList;
-        System.Collections.Generic.IList<Explosion> explosionList;
+        System.Collections.Generic.List<Explosion> explosionList;
         
 
         System.Collections.Generic.IList<Tile> tileList;
 
 
 
-        public void SpawnBombOnPosition(SFML.Window.Vector2i pos)
+        public void SpawnBombOnPosition(SFML.Window.Vector2i pos, Player player)
         {
             if (!IsTileBlocked(pos))    // there is a free tile
             {
-                Bomb myBomb = new Bomb(this, pos);
+                Bomb myBomb = new Bomb(this, pos, player);
 
                 bombList.Add(myBomb);
             }
@@ -218,66 +218,80 @@ namespace Bomberman
             // delete the explosions and spawn new explosions
             if (explosionList.Count() >= 1)
             {
-                if (explosionList[0] != null && explosionList[0].ExplosionDone == true)
+                List<Explosion> temporaryListForNewExplosions = new List<Explosion>();
+                explosionList.ForEach(delegate(Explosion e)
                 {
-                    Explosion e = explosionList[0];
-
-
-                    SFML.Window.Vector2i newPos = e.PositionInTiles;
-                    if (e.Direction == Explosion.ExplosionDirection.DirLeft)
-                        newPos.X--;
-                    else if (e.Direction == Explosion.ExplosionDirection.DirRight)
-                        newPos.X++;
-                    else if (e.Direction == Explosion.ExplosionDirection.DirUp)
-                        newPos.Y--;
-                    if (e.Direction == Explosion.ExplosionDirection.DirDown)
-                        newPos.Y++;
-
-                    if (!this.IsTileBlocked(newPos))    // it is a free tile so possibly spawn a new explosion here
+                    if (e.HasSpawnedOtherExplosions == false)
                     {
-                        if (e.ExplosionNumber < e.ExplosionNumberMax)
+                       e.HasSpawnedOtherExplosions = true;
+                        //Explosion e = explosionList[0];
+                        //   Explosion e = explosionList[0];
+                        SFML.Window.Vector2i newPos = e.PositionInTiles;
+                        if (e.Direction == Explosion.ExplosionDirection.DirLeft)
+                            newPos.X--;
+                        else if (e.Direction == Explosion.ExplosionDirection.DirRight)
+                            newPos.X++;
+                        else if (e.Direction == Explosion.ExplosionDirection.DirUp)
+                            newPos.Y--;
+                        if (e.Direction == Explosion.ExplosionDirection.DirDown)
+                            newPos.Y++;
+                        if (e.ExplosionNumber <= e.ExplosionNumberMax)
                         {
-                            Explosion newExplosion = new Explosion(this, newPos, e.Direction, e.ExplosionNumber + 1, e.ExplosionNumberMax);
-                            explosionList.Add(newExplosion);
-                        }
-                    }
-                    else // it is no free tile so check if this is a breakable tile
-                    {
-
-                        // check if there is a bomb on this tile
-                        foreach (Bomb b in bombList)
-                        {
-                            if (b.BombPositionInTiles.X == newPos.X && b.BombPositionInTiles.Y == newPos.Y)
+                            if (!this.IsTileBlocked(newPos))    // it is a free tile so possibly spawn a new explosion here
                             {
-                                b.Explode();
-                                break;
+
+                                Explosion newExplosion = new Explosion(this, newPos, e.Direction, e.ExplosionNumber + 1, e.ExplosionNumberMax, e.Owner);
+                                temporaryListForNewExplosions.Add(newExplosion);
                             }
-                        }
 
-                        Tile myBreakableAndSoonBrokenTile = null;
-                        foreach (Tile t in tileList)
-                        {
-                            if (t.TilePosition.X == newPos.X && t.TilePosition.Y == newPos.Y)
+                            else // it is no free tile so check if this is a breakable tile
                             {
-                                if (t.MyTileType == Tile.TileType.TileTypeBreakable)
+
+                                // check if there is a bomb on this tile
+                                foreach (Bomb b in bombList)
                                 {
-                                    myBreakableAndSoonBrokenTile = t;
-                                    break;
+                                    if (b.BombPositionInTiles.X == newPos.X && b.BombPositionInTiles.Y == newPos.Y)
+                                    {
+                                        b.Explode();
+                                        break;
+                                    }
+                                }
+
+                                Tile myBreakableAndSoonBrokenTile = null;
+                                foreach (Tile t in tileList)
+                                {
+                                    if (t.TilePosition.X == newPos.X && t.TilePosition.Y == newPos.Y)
+                                    {
+                                        if (t.MyTileType == Tile.TileType.TileTypeBreakable)
+                                        {
+                                            myBreakableAndSoonBrokenTile = t;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (myBreakableAndSoonBrokenTile != null)
+                                {
+                                    // remove the old breakable Tile && Spawn a new free Tile
+                                    tileList.Remove(myBreakableAndSoonBrokenTile);
+
+                                    Tile freeTile = new Tile(myBreakableAndSoonBrokenTile.TilePosition, Tile.TileType.TileTypeFree);
+                                    tileList.Add(freeTile);
+
                                 }
                             }
                         }
-                        if (myBreakableAndSoonBrokenTile != null)
-                        {
-                            // remove the old breakable Tile && Spawn a new free Tile
-                            tileList.Remove(myBreakableAndSoonBrokenTile);
-
-                            Tile freeTile = new Tile(myBreakableAndSoonBrokenTile.TilePosition, Tile.TileType.TileTypeFree);
-                            tileList.Add(freeTile);
-
-                        }
                     }
-                    explosionList.RemoveAt(0);
+                });
+
+                
+                
+                explosionList.RemoveAll(e => e.ExplosionDone == true);  // remove old explosions;
+                foreach (Explosion newExplosion in temporaryListForNewExplosions)
+                {
+                    explosionList.Add(newExplosion);
                 }
+
+
             }
         }
 
@@ -289,13 +303,13 @@ namespace Bomberman
                 if (bombList[0] != null && bombList[0].Exploded == true)
                 {
                     // TODO: Get Players Bob Strenght
-                    Explosion myExplosion = new Explosion(this, bombList[0].BombPositionInTiles, Explosion.ExplosionDirection.DirDown, 1, 3);
+                    Explosion myExplosion = new Explosion(this, bombList[0].BombPositionInTiles, Explosion.ExplosionDirection.DirDown, 1, bombList[0].Owner.BombStrenght, bombList[0].Owner);
                     explosionList.Add(myExplosion);
-                    myExplosion = new Explosion(this, bombList[0].BombPositionInTiles, Explosion.ExplosionDirection.DirUp, 1, 3);
+                    myExplosion = new Explosion(this, bombList[0].BombPositionInTiles, Explosion.ExplosionDirection.DirUp, 1, bombList[0].Owner.BombStrenght, bombList[0].Owner);
                     explosionList.Add(myExplosion);
-                    myExplosion = new Explosion(this, bombList[0].BombPositionInTiles, Explosion.ExplosionDirection.DirLeft, 1, 3);
+                    myExplosion = new Explosion(this, bombList[0].BombPositionInTiles, Explosion.ExplosionDirection.DirLeft, 1, bombList[0].Owner.BombStrenght, bombList[0].Owner);
                     explosionList.Add(myExplosion);
-                    myExplosion = new Explosion(this, bombList[0].BombPositionInTiles, Explosion.ExplosionDirection.DirRight, 1, 3);
+                    myExplosion = new Explosion(this, bombList[0].BombPositionInTiles, Explosion.ExplosionDirection.DirRight, 1, bombList[0].Owner.BombStrenght, bombList[0].Owner);
                     explosionList.Add(myExplosion);
 
                     bombList.RemoveAt(0);

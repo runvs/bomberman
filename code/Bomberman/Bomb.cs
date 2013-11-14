@@ -8,13 +8,16 @@ namespace Bomberman
 {
     class Bomb
     {
-        public Bomb (World world, SFML.Window.Vector2i position)
+        public Bomb (World world, SFML.Window.Vector2i position, Player player)
         {
             myWorld = world;
+            myOwner = player;
+
             timeUntilExplosion = GameProperties.BombCounterTime();
             BombPositionInTiles = position;
 
             Exploded = false;
+
 
             try
             {
@@ -53,6 +56,10 @@ namespace Bomberman
         public bool Exploded { get; private set; }
 
         World myWorld;
+
+        Player myOwner;
+        public Player Owner { get { return myOwner; } }
+
         private SFML.Graphics.Sprite bombSprite;
         private SFML.Graphics.Texture bombTexture;
 
