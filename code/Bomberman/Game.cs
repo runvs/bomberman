@@ -110,12 +110,30 @@ namespace Bomberman
 
         private void DrawCredits(SFML.Graphics.RenderWindow rw)
         {
-            throw new NotImplementedException();
+            SFML.Graphics.Text text = new SFML.Graphics.Text();
+            text.DisplayedString = "Bomberman";
+
+            text.Font = font;
+            text.Scale = new SFML.Window.Vector2f(2, 2);
+            text.Position = new SFML.Window.Vector2f(400 - text.GetGlobalBounds().Width / 2.0f, 150 - text.GetGlobalBounds().Height / 2.0f);
+            rw.Draw(text);
+
+            text = new SFML.Graphics.Text();
+            text.DisplayedString = "A Game by Simon Weis";
+            text.Font = font;
+            text.Position = new SFML.Window.Vector2f(400 - text.GetGlobalBounds().Width / 2.0f, 250 - text.GetGlobalBounds().Height / 2.0f);
+            rw.Draw(text);
         }
 
         private void DrawScore(SFML.Graphics.RenderWindow rw)
         {
-            throw new NotImplementedException();
+            SFML.Graphics.Text text = new SFML.Graphics.Text();
+            text.DisplayedString = "Game Over";
+
+            text.Font = font;
+            text.Scale = new SFML.Window.Vector2f(1.5f, 1.5f);
+            text.Position = new SFML.Window.Vector2f(400 - text.GetGlobalBounds().Width / 2.0f, 150 - text.GetGlobalBounds().Height / 2.0f);
+            rw.Draw(text);
         }
 
 

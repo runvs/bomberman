@@ -95,6 +95,11 @@ namespace Bomberman
                 b.Draw(rw);
             }
 
+            foreach (PowerUp p in powerupList)
+            {
+                p.Draw(rw);
+            }
+
             foreach (Player p in playerList)
             {
                 p.Draw(rw);
@@ -103,6 +108,7 @@ namespace Bomberman
             {
                 e.Draw(rw);
             }
+            
         }
 
 
@@ -192,6 +198,12 @@ namespace Bomberman
         {
             bool ret = false;
 
+            if (pos.X < 0 || pos.Y < 0 || pos.X >= GameProperties.WorldSizeInTiles() || pos.Y >= GameProperties.WorldSizeInTiles())
+            {
+                return true;
+            }
+
+
             foreach (Tile t in tileList)
             {
                 if (t.TilePosition.X == pos.X && t.TilePosition.Y == pos.Y)
@@ -257,7 +269,6 @@ namespace Bomberman
                         {
                             if (!this.IsTileBlocked(newPos))    // it is a free tile so possibly spawn a new explosion here
                             {
-
                                 Explosion newExplosion = new Explosion(this, newPos, e.Direction, e.ExplosionNumber + 1, e.ExplosionNumberMax, e.Owner);
                                 temporaryListForNewExplosions.Add(newExplosion);
                                 foreach (PowerUp up in powerupList)
@@ -331,6 +342,7 @@ namespace Bomberman
             if (myRandomGenerator.NextDouble() <= GameProperties.PowerUpSpawnProbability())
             {
                 PowerUp up = new PowerUp(freeTile.TilePosition);
+                powerupList.Add(up);
             }
 
         }

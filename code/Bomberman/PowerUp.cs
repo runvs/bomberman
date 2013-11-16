@@ -13,7 +13,17 @@ namespace Bomberman
             ChooseRandomPowerUpType();
             PositionInTiles = pos;
             Picked = false;
+
+            System.Console.Out.WriteLine("up spawned");
+
+            LoadGraphics();
         }
+
+        public void Draw(SFML.Graphics.RenderWindow rw)
+        {
+            rw.Draw(spritePowerUp);
+        }
+
 
         System.Random myRandomGenerator = new Random();
 
@@ -29,7 +39,7 @@ namespace Bomberman
 
         private void ChooseRandomPowerUpType()
         {
-            if (myRandomGenerator.Next(1) == 0)
+            if (myRandomGenerator.Next(2) == 0)
             {
                 Type = PowerUpType.MoreBombs;
             }
@@ -41,6 +51,26 @@ namespace Bomberman
         }
 
         public SFML.Window.Vector2i PositionInTiles { get; set; }
+
+        private SFML.Graphics.Texture texturePowerUp;
+        private SFML.Graphics.Sprite spritePowerUp;
+
+        private void LoadGraphics()
+        {
+            if (Type == PowerUpType.MoreBombs)
+            {
+                texturePowerUp = new SFML.Graphics.Texture("../gfx/up_morebombs.png");
+            }
+            else if (Type == PowerUpType.StrongerBombs)
+            {
+                texturePowerUp = new SFML.Graphics.Texture("../gfx/up_morebombs.png");
+            }
+
+            spritePowerUp = new SFML.Graphics.Sprite(texturePowerUp);
+
+            spritePowerUp.Position = new SFML.Window.Vector2f((float)(PositionInTiles.X) * GameProperties.TileSizeInPixel(), (float)(PositionInTiles.Y) * GameProperties.TileSizeInPixel());
+
+        }
 
     }
 }
