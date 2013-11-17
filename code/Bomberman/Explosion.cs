@@ -88,7 +88,12 @@ namespace Bomberman
 
         private void LoadGraphics()
         {
+            
             explosiontexture = new SFML.Graphics.Texture("../gfx/explosion.png");
+            if (ExplosionNumber == 1)
+            {
+                explosiontexture = new SFML.Graphics.Texture("../gfx/explosion_base.png");
+            }
             explosionSprite = new SFML.Graphics.Sprite(explosiontexture);
         }
 

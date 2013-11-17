@@ -48,6 +48,22 @@ namespace Bomberman
             return 0.2f;
         }
 
+        internal static SFML.Graphics.Color Player1Color()
+        {
+            return new SFML.Graphics.Color(0, 190, 255);
+        }
+
+        internal static SFML.Graphics.Color Player2Color()
+        {
+            return new SFML.Graphics.Color(190, 255, 0);
+        }
+
+        internal static SFML.Graphics.Color Player3Color()
+        {
+            return new SFML.Graphics.Color(255, 0, 190);
+        }
+
+
 
     }
 }

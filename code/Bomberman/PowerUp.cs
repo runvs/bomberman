@@ -14,8 +14,6 @@ namespace Bomberman
             PositionInTiles = pos;
             Picked = false;
 
-            System.Console.Out.WriteLine("up spawned");
-
             LoadGraphics();
         }
 

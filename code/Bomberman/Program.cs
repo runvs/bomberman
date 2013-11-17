@@ -37,6 +37,7 @@ namespace Bomberman
             applicationWindow.KeyPressed += new EventHandler<SFML.Window.KeyEventArgs>(OnKeyPress);
 
             Game myGame = new Game();
+
             
 
             int startTime = Environment.TickCount;

@@ -386,11 +386,27 @@ namespace Bomberman
             }
         }
 
-
-
         public Statistic EndThisRound()
         {
             Statistic ret = new Statistic();
+            
+            ret.WinnerName = String.Empty;
+
+            foreach (Player p in playerList)
+            {
+                if (!p.IsDead)
+                {
+                    ret.WinnerName = p.PlayerName;
+                    ret.WinnerNumber = p.playerNumber;
+                    break;
+                }
+            }
+
+            if (String.IsNullOrEmpty(ret.WinnerName))
+            {
+                ret.ItsADraw = true;
+            }
+            
 
             return ret;
         }

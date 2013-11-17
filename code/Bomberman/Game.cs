@@ -49,6 +49,8 @@ namespace Bomberman
             }
         }
 
+        Statistic GameStats;
+
         public void Update(float deltaT)
         {
             if (timeTilNextInput >= 0.0f)
@@ -61,7 +63,7 @@ namespace Bomberman
                 myWorld.Update(deltaT);
                 if (myWorld.NumberOfPlayersAlive <= 1)
                 {
-                   Statistic stats = myWorld.EndThisRound();
+                    GameStats = myWorld.EndThisRound();
                    ChangeGameState(State.Score);
                 }
             }
@@ -77,6 +79,12 @@ namespace Bomberman
             }
             else if (gameState == State.Game)
             {
+                SFML.Graphics.View myView = new SFML.Graphics.View(new SFML.Window.Vector2f(400, 300), new SFML.Window.Vector2f(800, 600));
+                //myView.Center = new SFML.Window.Vector2f(0.0f, 0.0f);
+                myView.Zoom(0.55f);
+                myView.Move(new SFML.Window.Vector2f(-190, -144));
+                rw.SetView(myView);
+
                 myWorld.Draw(rw);
             }
             else if (gameState == State.Credits)
@@ -85,7 +93,9 @@ namespace Bomberman
             }
             else if (gameState == State.Score)
             {
+                rw.SetView(rw.DefaultView);
                 DrawScore(rw);
+                
             }
         }
 
@@ -127,13 +137,7 @@ namespace Bomberman
 
         private void DrawScore(SFML.Graphics.RenderWindow rw)
         {
-            SFML.Graphics.Text text = new SFML.Graphics.Text();
-            text.DisplayedString = "Game Over";
-
-            text.Font = font;
-            text.Scale = new SFML.Window.Vector2f(1.5f, 1.5f);
-            text.Position = new SFML.Window.Vector2f(400 - text.GetGlobalBounds().Width / 2.0f, 150 - text.GetGlobalBounds().Height / 2.0f);
-            rw.Draw(text);
+            GameStats.Draw(rw);
         }
 
 

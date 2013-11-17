@@ -316,14 +316,48 @@ namespace Bomberman
 
         private void LoadGraphics()
         {
-            playerTexture = new SFML.Graphics.Texture("../gfx/player.png");
+            SFML.Graphics.Image playerImage = new SFML.Graphics.Image("../gfx/player.png");
+
+            SFML.Graphics.Color playerColor = SFML.Graphics.Color.White;
+
+            if (playerNumber == 1)
+            {
+                playerColor = GameProperties.Player1Color();
+                
+            }
+            else if (playerNumber == 2)
+            {
+                playerColor = GameProperties.Player2Color();
+
+            }
+            else if (playerNumber == 3)
+            {
+                playerColor = GameProperties.Player3Color();
+            }
+
+            for (uint i = 0; i < playerImage.Size.X; ++i)
+            {
+                for (uint j = 0; j < playerImage.Size.Y; ++j)
+                {
+                    if (playerImage.GetPixel(i, j).Equals(SFML.Graphics.Color.White))
+                    {
+                        playerImage.SetPixel(i, j, playerColor);
+                    }
+                }
+            }
+
+
+            
+
+            playerTexture = new SFML.Graphics.Texture(playerImage);
+
             playerSprite = new SFML.Graphics.Sprite(playerTexture);
         }
 
         private float movementTimer = 0.0f; // time til two successive Movement commands
         
         private World myWorld;
-        private int playerNumber;
+        public int playerNumber;
 
         public bool IsDead { get; private set; }
 
