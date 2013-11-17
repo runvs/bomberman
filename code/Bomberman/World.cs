@@ -231,15 +231,32 @@ namespace Bomberman
 
 
 
+        private int GetNumberOfActiveBombsByPlayer(Player player)
+        {
+            int ret = 0;
+
+            foreach (Bomb b in bombList)
+            {
+                if (b.Owner == player)
+                {
+                    ret++;
+                }
+            }
+
+            return ret;
+        }
 
 
         public void SpawnBombOnPosition(SFML.Window.Vector2i pos, Player player)
         {
-            if (!IsTileBlocked(pos))    // there is a free tile
+            if (GetNumberOfActiveBombsByPlayer(player) < player.PlayersBombsMax)
             {
-                Bomb myBomb = new Bomb(this, pos, player);
+                if (!IsTileBlocked(pos))    // there is a free tile
+                {
+                    Bomb myBomb = new Bomb(this, pos, player);
 
-                bombList.Add(myBomb);
+                    bombList.Add(myBomb);
+                }
             }
         }
 

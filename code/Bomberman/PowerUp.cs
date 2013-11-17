@@ -63,7 +63,7 @@ namespace Bomberman
             }
             else if (Type == PowerUpType.StrongerBombs)
             {
-                texturePowerUp = new SFML.Graphics.Texture("../gfx/up_morebombs.png");
+                texturePowerUp = new SFML.Graphics.Texture("../gfx/up_strongerbombs.png");
             }
 
             spritePowerUp = new SFML.Graphics.Sprite(texturePowerUp);

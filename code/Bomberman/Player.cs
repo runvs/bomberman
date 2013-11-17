@@ -15,10 +15,13 @@ namespace Bomberman
             IsDead = false;
 
             playerNumber = number;
+            
 
             SetPlayerNumberDependendProperties();
 
             BombStrenght = GameProperties.DefaultBombStrengthInTiles();
+            PlayersBombsMax = GameProperties.DefaultPlayersBombs();
+            
 
             try
             {
@@ -332,12 +335,14 @@ namespace Bomberman
         }
 
 
+        public int PlayersBombsMax { get; private set; }
+
 
         internal void PickUpPowerUp(PowerUp.PowerUpType powerUpType)
         {
             if (powerUpType == PowerUp.PowerUpType.MoreBombs)
             {
-
+                PlayersBombsMax++;
             }
             else if (powerUpType == PowerUp.PowerUpType.StrongerBombs)
             {

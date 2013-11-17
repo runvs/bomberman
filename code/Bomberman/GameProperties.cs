@@ -31,18 +31,23 @@ namespace Bomberman
 
         internal static float ExplosionTime()
         {
-            return 0.25f;
+            return 0.35f;
         }
 
         internal static int DefaultBombStrengthInTiles()
         {
             return 1;
         }
+        internal static int DefaultPlayersBombs()
+        {
+            return 1;
+        }
 
         internal static double PowerUpSpawnProbability()
         {
-            return 1.0f
-            ;
+            return 0.2f;
         }
+
+
     }
 }
