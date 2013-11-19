@@ -116,23 +116,61 @@ namespace Bomberman
             text.Position = new SFML.Window.Vector2f(400 - text.GetGlobalBounds().Width / 2.0f, 250 - text.GetGlobalBounds().Height / 2.0f);
             rw.Draw(text);
 
+
+            text = new SFML.Graphics.Text();
+            text.DisplayedString = "[C]redits";
+            text.Font = font;
+            text.Scale = new SFML.Window.Vector2f(0.75f, 0.75f);
+            text.Position = new SFML.Window.Vector2f(30, 550 - text.GetGlobalBounds().Height / 2.0f);
+            rw.Draw(text);
+
         }
 
         private void DrawCredits(SFML.Graphics.RenderWindow rw)
         {
-            SFML.Graphics.Text text = new SFML.Graphics.Text();
-            text.DisplayedString = "Bomberman";
+            
 
-            text.Font = font;
-            text.Scale = new SFML.Window.Vector2f(2, 2);
-            text.Position = new SFML.Window.Vector2f(400 - text.GetGlobalBounds().Width / 2.0f, 150 - text.GetGlobalBounds().Height / 2.0f);
-            rw.Draw(text);
+            SFML.Graphics.Text CreditsText = new SFML.Graphics.Text("Bomberman", font);
+            CreditsText.Scale = new SFML.Window.Vector2f(1.5f, 1.5f);
+            CreditsText.Position = new SFML.Window.Vector2f(400 - (float)(CreditsText.GetGlobalBounds().Width / 2.0), 20);
+            rw.Draw(CreditsText);
 
-            text = new SFML.Graphics.Text();
-            text.DisplayedString = "A Game by Simon Weis";
-            text.Font = font;
-            text.Position = new SFML.Window.Vector2f(400 - text.GetGlobalBounds().Width / 2.0f, 250 - text.GetGlobalBounds().Height / 2.0f);
-            rw.Draw(text);
+            CreditsText = new SFML.Graphics.Text("A Game by", font);
+            CreditsText.Scale = new SFML.Window.Vector2f(.75f, 0.75f);
+            CreditsText.Position = new SFML.Window.Vector2f(400 - (float)(CreditsText.GetGlobalBounds().Width / 2.0), 100);
+            rw.Draw(CreditsText);
+
+            CreditsText = new SFML.Graphics.Text("Simon Weis", font);
+            CreditsText.Scale = new SFML.Window.Vector2f(1, 1);
+            CreditsText.Position = new SFML.Window.Vector2f(400 - (float)(CreditsText.GetGlobalBounds().Width / 2.0), 135);
+            rw.Draw(CreditsText);
+
+            CreditsText = new SFML.Graphics.Text("Visual Studio 2010 \t C# \t SFML.Net 2.1 ", font);
+            CreditsText.Scale = new SFML.Window.Vector2f(0.75f, 0.75f);
+            CreditsText.Position = new SFML.Window.Vector2f(400 - (float)(CreditsText.GetGlobalBounds().Width / 2.0), 170);
+            rw.Draw(CreditsText);
+
+            CreditsText = new SFML.Graphics.Text("aseprite \t LMMS", font);
+            CreditsText.Scale = new SFML.Window.Vector2f(0.75f, 0.75f);
+            CreditsText.Position = new SFML.Window.Vector2f(400 - (float)(CreditsText.GetGlobalBounds().Width / 2.0), 200);
+            rw.Draw(CreditsText);
+
+            CreditsText = new SFML.Graphics.Text("Thanks to", font);
+            CreditsText.Scale = new SFML.Window.Vector2f(0.75f, 0.75f);
+            CreditsText.Position = new SFML.Window.Vector2f(400 - (float)(CreditsText.GetGlobalBounds().Width / 2.0), 350);
+            rw.Draw(CreditsText);
+
+            CreditsText = new SFML.Graphics.Text("Families & Friends for their great support", font);
+            CreditsText.Scale = new SFML.Window.Vector2f(0.75f, 0.75f);
+            CreditsText.Position = new SFML.Window.Vector2f(400 - (float)(CreditsText.GetGlobalBounds().Width / 2.0), 375);
+            rw.Draw(CreditsText);
+
+            CreditsText = new SFML.Graphics.Text("Created Nov 2013", font);
+            CreditsText.Scale = new SFML.Window.Vector2f(0.75f, 0.75f);
+            CreditsText.Position = new SFML.Window.Vector2f(400 - (float)(CreditsText.GetGlobalBounds().Width / 2.0), 500);
+            rw.Draw(CreditsText);
+
+
         }
 
         private void DrawScore(SFML.Graphics.RenderWindow rw)
@@ -157,6 +195,12 @@ namespace Bomberman
             {
                 StartGame();
             }
+
+            if (SFML.Window.Keyboard.IsKeyPressed(SFML.Window.Keyboard.Key.C))
+            {
+                ChangeGameState(State.Credits);
+            }
+
         }
 
 
@@ -177,8 +221,21 @@ namespace Bomberman
         {
             if (SFML.Window.Keyboard.IsKeyPressed(SFML.Window.Keyboard.Key.Escape))
             {
-                ChangeGameState(State.Menu);
+                ChangeGameState(State.Menu, 1.0f);
             }
+            if (SFML.Window.Keyboard.IsKeyPressed(SFML.Window.Keyboard.Key.Return))
+            {
+                ChangeGameState(State.Menu, 0.5f);
+            }
+            if (SFML.Window.Keyboard.IsKeyPressed(SFML.Window.Keyboard.Key.C))
+            {
+                ChangeGameState(State.Menu, 0.5f);
+            }
+            if (SFML.Window.Keyboard.IsKeyPressed(SFML.Window.Keyboard.Key.Space))
+            {
+                ChangeGameState(State.Menu, 0.5f);
+            }
+
         }
 
 

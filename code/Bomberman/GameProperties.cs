@@ -55,12 +55,13 @@ namespace Bomberman
 
         internal static SFML.Graphics.Color Player2Color()
         {
-            return new SFML.Graphics.Color(190, 255, 0);
+            return new SFML.Graphics.Color(255, 0, 190);
+            
         }
 
         internal static SFML.Graphics.Color Player3Color()
         {
-            return new SFML.Graphics.Color(255, 0, 190);
+            return new SFML.Graphics.Color(190, 255, 0);
         }
 
 

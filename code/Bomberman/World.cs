@@ -179,7 +179,7 @@ namespace Bomberman
                     else
                     {
                         // TODO Change default Layout to some random Pattern
-                        if (i != 0 && i != GameProperties.WorldSizeInTiles() -1 && j != 0 && j != GameProperties.WorldSizeInTiles() -1 )
+                        if (i != 0 && i != GameProperties.WorldSizeInTiles() -1 && j != 0 && j != GameProperties.WorldSizeInTiles() -1 || (i <= 2 && i >= GameProperties.WorldSizeInTiles() -3) &&  (j <= 2 && j >= GameProperties.WorldSizeInTiles() -3) )
                         {
                             myTile = new Tile(new SFML.Window.Vector2i(i, j), Tile.TileType.TileTypeBreakable);
                         }
@@ -254,8 +254,8 @@ namespace Bomberman
                 if (!IsTileBlocked(pos))    // there is a free tile
                 {
                     Bomb myBomb = new Bomb(this, pos, player);
-
                     bombList.Add(myBomb);
+                    player.IncreasePlaceBombCounter();
                 }
             }
         }
@@ -329,7 +329,7 @@ namespace Bomberman
                                 {
                                     // remove the old breakable Tile && Spawn a new free Tile
                                     tileList.Remove(myBreakableAndSoonBrokenTile);
-
+                                    e.Owner.DestroyBlock();
                                     Tile freeTile = new Tile(myBreakableAndSoonBrokenTile.TilePosition, Tile.TileType.TileTypeFree);
                                     CheckSpawnPowerUp(freeTile);
                                     tileList.Add(freeTile);
@@ -392,14 +392,21 @@ namespace Bomberman
             
             ret.WinnerName = String.Empty;
 
+
+
             foreach (Player p in playerList)
             {
+                ret.DestroyedBlocks[p.playerNumber - 1] = p.NumberOfDestroyedBlocs;
+                ret.PlacedBombs[p.playerNumber - 1] = p.NumberOfPlacedBombs;
+                ret.PickedPowerUps[p.playerNumber - 1] = p.NumberOfPickedPowerUps;
+
                 if (!p.IsDead)
                 {
                     ret.WinnerName = p.PlayerName;
                     ret.WinnerNumber = p.playerNumber;
                     break;
                 }
+                
             }
 
             if (String.IsNullOrEmpty(ret.WinnerName))

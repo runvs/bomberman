@@ -15,7 +15,10 @@ namespace Bomberman
             IsDead = false;
 
             playerNumber = number;
-            
+
+            NumberOfDestroyedBlocs = 0;
+            NumberOfPlacedBombs = 0;
+            NumberOfPlacedBombs = 0;
 
             SetPlayerNumberDependendProperties();
 
@@ -45,14 +48,6 @@ namespace Bomberman
             }
             else if (playerNumber == 2)
             {
-                PositionInTiles = new SFML.Window.Vector2i(GameProperties.WorldSizeInTiles(), 0);
-            }
-            else if (playerNumber == 3)
-            {
-                PositionInTiles = new SFML.Window.Vector2i(0, GameProperties.WorldSizeInTiles());
-            }
-            else if (playerNumber == 4)
-            {
                 PositionInTiles = new SFML.Window.Vector2i(GameProperties.WorldSizeInTiles(), GameProperties.WorldSizeInTiles());
             }
 
@@ -64,6 +59,21 @@ namespace Bomberman
         private bool movingLeft;
         private bool movingUp;
         private bool movingDown;
+
+        public int NumberOfDestroyedBlocs { get; private set; }
+        public int NumberOfPlacedBombs { get; private set; }
+        public int NumberOfPickedPowerUps { get; set; }
+
+        public void DestroyBlock()
+        {
+            NumberOfDestroyedBlocs++;
+        }
+
+        public void IncreasePlaceBombCounter()
+        {
+            NumberOfPlacedBombs++;
+        }
+
 
 
 
@@ -306,6 +316,7 @@ namespace Bomberman
         {
             SFML.Window.Vector2i pos = PositionInTiles;
             myWorld.SpawnBombOnPosition(pos, this);
+            
         }
 
 
@@ -374,6 +385,7 @@ namespace Bomberman
 
         internal void PickUpPowerUp(PowerUp.PowerUpType powerUpType)
         {
+            NumberOfPickedPowerUps++;
             if (powerUpType == PowerUp.PowerUpType.MoreBombs)
             {
                 PlayersBombsMax++;
